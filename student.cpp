@@ -2,34 +2,42 @@
 #include <string>
 #include <cstring>
 
-Student::Student(const char * const name, int perm) {
-  this->setName("another stub");
+Student::Student(const char * const name, int perm) : name(nullptr), perm(0) {
+  this->setName(name);
+  this->setPerm(perm);
 }
 
 int Student::getPerm() const {
-  return -42;
+  return perm;
 }
 
 const char * const Student::getName() const {
-  return "stub";
+  return name;
 }
 
 void Student::setPerm(const int permNumber) {
+  this->perm = permNumber;
 }
 
 void Student::setName(const char * const name) {
-  this->name = new char[strlen("stub")+1];
-  strcpy(this->name,"stub");
+  delete[] this->name;
+  if (name == nullptr) {
+    this->name = new char[1];
+    this->name[0] = '\0';;
+    return;
+  }
+  this->name = new char[strlen(name)+1];
+  strcpy(this->name,name);
 }
 
 
-Student::Student(const Student &orig) {
-  this->setName("yet another stub");
-  this->setPerm(-42);
+Student::Student(const Student &orig) : name(nullptr), perm(0) {
+  this->setName(orig.getName());
+  this->setPerm(orig.getPerm());
 }
 
 Student::~Student() {
-
+  delete[] name;
 }
 
 Student & Student::operator=(const Student &right) {
@@ -42,7 +50,8 @@ Student & Student::operator=(const Student &right) {
 
   // TODO... Here is where there is code missing that you need to 
   // fill in...
-
+  this->setName(right.getName());
+  this->setPerm(right.getPerm());
 
   // KEEP THE CODE BELOW THIS LINE
   // Overloaded = should end with this line, despite what the textbook says.
@@ -51,6 +60,6 @@ Student & Student::operator=(const Student &right) {
 }
 
 std::string Student::toString() const {
-  return "tostring stub";
+  return std::string("Student: ") + this->getName() + ", Perm: " + std::to_string(this->getPerm());
 }
 
