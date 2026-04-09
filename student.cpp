@@ -20,14 +20,23 @@ void Student::setPerm(const int permNumber) {
 }
 
 void Student::setName(const char * const name) {
-  delete[] this->name;
+  if (this->name == name) {
+    return; 
+  }
+
   if (name == nullptr) {
+    delete[] this->name;
     this->name = new char[1];
-    this->name[0] = '\0';;
+    this->name[0] = '\0';
     return;
   }
-  this->name = new char[strlen(name)+1];
-  strcpy(this->name,name);
+
+
+  char* newName = new char[strlen(name) + 1];
+  strcpy(newName, name);
+
+  delete[] this->name;
+  this->name = newName;
 }
 
 
@@ -60,6 +69,6 @@ Student & Student::operator=(const Student &right) {
 }
 
 std::string Student::toString() const {
-  return std::string("Student: ") + this->getName() + ", Perm: " + std::to_string(this->getPerm());
+  return std::string("[") + this->getName() + ", " + std::to_string(this->getPerm()) + "]";
 }
 
